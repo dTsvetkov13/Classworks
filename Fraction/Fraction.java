@@ -51,4 +51,50 @@ public class Fraction {
 	{
 		return numerator + " / " + denominator;
 	}
+	
+	Fraction add(Fraction f)
+	{
+		Fraction result = new Fraction();
+		
+		result.setNumerator(this.numerator * f.getDenomirator() + f.getNumerator() * this.denominator);
+		result.setDenominator(this.denominator * f.getDenomirator());
+		
+		return result;
+	}
+	
+	Fraction substract(Fraction f)
+	{
+		Fraction result = new Fraction();
+		
+		result.setNumerator(this.numerator * f.getDenomirator() - f.getNumerator() * this.denominator);
+		result.setDenominator(this.denominator * f.getDenomirator());
+		
+		return result;
+	}
+	
+	Fraction multiply(Fraction f)
+	{
+		Fraction result = new Fraction();
+		
+		result.setNumerator(this.numerator * f.getNumerator());
+		result.setDenominator(this.denominator * f.getDenomirator());
+		
+		return result;
+	}
+	
+	Fraction divide(Fraction f)
+	{
+		return this.multiply(new Fraction(f.getDenomirator(), f.getNumerator()));
+	}
+	
+	void simplify()
+	{
+		int gcd = gcd(this.numerator, this.denominator);
+	    this.numerator /= gcd;
+	    this.denominator /= gcd;
+	}
+	
+	private static int gcd(int a, int b) {
+	    return b == 0 ? a : gcd(b, a % b);
+	}
 }
