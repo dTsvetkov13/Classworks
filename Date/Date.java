@@ -8,7 +8,71 @@ public class Date
 	private int day; 
 	private int month;
 	private int year;
-
+	private DayOfWeek dayOfWeek;
+	
+	enum DayOfWeek
+	{
+		Monday,
+		Tuesday,
+		Wednesday,
+		Thursday,
+		Friday,
+		Saturday,
+		Sunday,
+		
+		DayOfWeek();
+		
+		public String toString()
+		{
+			return this.name();
+		}
+		
+		public String toString(int numberOfLetters)
+		{
+			if(this.name().length() < numberOfLetters || numberOfLetters < 0)
+			{
+				throw new RuntimeException("DayOfWeek toString(int)");
+			}
+			
+			return toString().substring(0, numberOfLetters);
+		}
+		
+		public static DayOfWeek getDayOfWeek(int value)
+		{
+			switch(value)
+			{
+			case(0):
+			{
+				return Monday;
+			}
+			case(1):
+			{
+				return Tuesday;
+			}
+			case(2):
+			{
+				return Wednesday;
+			}
+			case(3):
+			{
+				return Thursday;
+			}
+			case(4):
+			{
+				return Friday;
+			}
+			case(5):
+			{
+				return Saturday;
+			}
+			default:
+			{
+				return Sunday;
+			}
+			}
+		}
+	}
+	
 	//Default
 	Date()
 	{
@@ -49,6 +113,19 @@ public class Date
 		this(0, 0, 0, day, month, year);
 	}
 	
+	//A constructor to specify the day of week
+	public Date(DayOfWeek dayOfWeek)
+	{
+		super();
+		this.dayOfWeek = dayOfWeek;
+	}
+	
+	public Date(int dayOfWeek)
+	{
+		super();
+		this.dayOfWeek = DayOfWeek.getDayOfWeek(dayOfWeek - 1);
+	}
+
 	//Setters
 	void SetSeconds(int seconds) { this.seconds = seconds; }
 	void SetMinutes(int minutes) { this.minutes = minutes; }
@@ -56,6 +133,7 @@ public class Date
 	void SetDay(int day) { this.day = day; }
 	void SetMonth(int month) { this.month = month; }
 	void SetYear(int year) { this.year = year; }
+	void SetDayOfWeek(DayOfWeek dayOfWeek) { this.dayOfWeek = dayOfWeek; }
 	
 	//Getters
 	int GetSeconds() { return this.seconds; }
@@ -64,6 +142,7 @@ public class Date
 	int GetDay() { return this.day; }
 	int GetMonth() { return this.month; }
 	int GetYear() { return this.year; }
+	DayOfWeek SetDayOfWeek() { return this.dayOfWeek; }
 	
 	private void ValidateInRange(int value, int from, int to)
 	{
@@ -222,8 +301,17 @@ public class Date
 		return (DayOfTheYear() + startDay - 1) / 7;
 	}
 	
+	public DayOfWeek WhichDayOfWeek()
+	{
+		int[] t = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+		this.year -= this.month < 3 ? this.month : 0;
+		return DayOfWeek.getDayOfWeek(((this.year + this.year/4 
+										- this.year/100 + this.year/400 
+										+ t[this.month-1] + this.day) % 7) - 1);
+	}
+	
 	public String ToString()
 	{
-		return hours + ":" + minutes + ":" + seconds + " of " + day + "." + month + "." + year;  
+		return hours + ":" + minutes + ":" + seconds + " of " + day + "." + month + "." + year + ", " + WhichDayOfWeek();  
 	}
 }

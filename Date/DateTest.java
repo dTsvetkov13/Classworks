@@ -2,6 +2,8 @@ package oop.classes;
 
 import java.util.ArrayList;
 
+import oop.classes.Date.DayOfWeek;
+
 public class DateTest {
 
 	public static void main(String[] args)
@@ -57,6 +59,10 @@ public class DateTest {
 		{
 			System.out.println(i.ToString());
 		}
+		
+		System.out.println(DayOfWeek.getDayOfWeek(0).toString(3));
+		
+		System.out.println(d3.ToString());
 	}
 	
 	public static void SortDates(ArrayList<Date> l)
