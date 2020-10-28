@@ -1,8 +1,9 @@
-package oop.classes;
+package oop.classes.Date.tests;
 
 import java.util.ArrayList;
 
-import oop.classes.Date.DayOfWeek;
+import oop.classes.Date.enums.DayOfWeek;
+import oop.classes.Date.models.Date;
 
 public class DateTest {
 
@@ -10,9 +11,9 @@ public class DateTest {
 	{
 		Date d1 = new Date();
 		//Second January 2003
-		Date d2 = new Date(2, 1, 2003);
-		//Date d2 = new Date(59, 59, 23, 28, 2, 2004); - Test adding a second for leap year
-		//Date d2 = new Date(59, 59, 23, 31, 12, 2004); - Test adding a second just before New Year 
+		//Date d2 = new Date(2, 1, 2003);
+		//Date d2 = new Date(59, 59, 23, 28, 2, 2004); // - Test adding a second for leap year
+		Date d2 = new Date(59, 59, 23, 31, 12, 2004); // - Test adding a second just before New Year 
 		Date d3 = new Date(0, 0, 23, 20, 10, 2020);
 		
 		if(d2.CompareTo(d3) == 1)
