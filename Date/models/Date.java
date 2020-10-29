@@ -318,7 +318,21 @@ public class Date
 	
 	public String ToString()
 	{
-		return hours + ":" + minutes + ":" + seconds + " of "
-				+ day + "." + month + "." + year + ", " + WhichDayOfWeek();  
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(hours);
+		stringBuilder.append(":");
+		stringBuilder.append(minutes);
+		stringBuilder.append(":");
+		stringBuilder.append(seconds);
+		stringBuilder.append(" of ");
+		stringBuilder.append(day);
+		stringBuilder.append(".");
+		stringBuilder.append(month);
+		stringBuilder.append(".");
+		stringBuilder.append(year);
+		stringBuilder.append(", ");
+		stringBuilder.append(WhichDayOfWeek());
+		
+		return stringBuilder.toString();
 	}
 }
