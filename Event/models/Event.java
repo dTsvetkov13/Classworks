@@ -53,9 +53,9 @@ public class Event
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		
+		stringBuilder.append(date.toString());
+		stringBuilder.append(" - ");
 		stringBuilder.append(name);
-		stringBuilder.append(" at ");
-		stringBuilder.append(date.ToString());
 		
 		return stringBuilder.toString();
 	}

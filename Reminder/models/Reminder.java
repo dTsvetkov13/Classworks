@@ -2,6 +2,7 @@ package oop.classes.Reminder.models;
 
 import java.time.LocalDateTime;
 
+import oop.classes.Date.enums.DateCompare;
 import oop.classes.Date.models.Date;
 import oop.classes.event.models.Event;
 
@@ -50,7 +51,7 @@ public class Reminder
 		{
 			temp = events[i].getDate(); 
 			
-			if(onTheSameDay(temp, date))
+			if(temp.compareTo(date, DateCompare.Date) == 0)
 			{
 				resultSize++;
 			}
@@ -64,7 +65,7 @@ public class Reminder
 		{
 			temp = events[i].getDate();
 			
-			if(onTheSameDay(temp, date))
+			if(temp.compareTo(date, DateCompare.Date) == 0)
 			{
 				result[index] = events[i];
 				index++;
@@ -72,22 +73,6 @@ public class Reminder
 		}
 		
 		return result;
-	}
-	
-	private boolean onTheSameDay(Date d1, Date d2)
-	{
-		if(d1.getYear() == d2.getYear())
-		{
-			if(d1.getMonth() == d2.getMonth())
-			{
-				if(d1.getDay() == d2.getDay())
-				{
-					return true;
-				}
-			}
-		}
-		
-		return false;
 	}
 	
 	public void remind()

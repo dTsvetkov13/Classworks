@@ -1,5 +1,6 @@
 package oop.classes.Date.models;
 
+import oop.classes.Date.enums.DateCompare;
 import oop.classes.Date.enums.DayOfWeek;
 
 public class Date
@@ -70,37 +71,37 @@ public class Date
 	//Setters
 	public void setSeconds(int seconds)
 	{
-		ValidateInRange(seconds, SECONDS_MIN_VALUE, SECONDS_MAX_VALUE);
+		validateInRange(seconds, SECONDS_MIN_VALUE, SECONDS_MAX_VALUE);
 		this.seconds = seconds;
 	}
 
 	public void setMinutes(int minutes)
 	{
-		ValidateInRange(minutes, MINUTES_MIN_VALUE, MINUTES_MAX_VALUE);
+		validateInRange(minutes, MINUTES_MIN_VALUE, MINUTES_MAX_VALUE);
 		this.minutes = minutes;
 	}
 
 	public void setHours(int hours)
 	{
-		ValidateInRange(hours, HOURS_MIN_VALUE, HOURS_MAX_VALUE);
+		validateInRange(hours, HOURS_MIN_VALUE, HOURS_MAX_VALUE);
 		this.hours = hours;
 	}
 
 	public void setDay(int day)
 	{
-		ValidateDay(day);
+		validateDay(day);
 		this.day = day;
 	}
 
 	public void setMonth(int month)
 	{
-		ValidateInRange(month, MONTHS_MIN_VALUE, MONTHS_MAX_VALUE);
+		validateInRange(month, MONTHS_MIN_VALUE, MONTHS_MAX_VALUE);
 		this.month = month;
 	}
 
 	public void setYear(int year)
 	{
-		ValidateInRange(year, YEARS_MIN_VALUE, YEARS_MAX_VALUE);
+		validateInRange(year, YEARS_MIN_VALUE, YEARS_MAX_VALUE);
 		this.year = year;
 	}
 
@@ -146,52 +147,93 @@ public class Date
 		return dayOfWeek;
 	}
 	
-	private void ValidateInRange(int value, int from, int to)
+	private void validateInRange(int value, int from, int to)
 	{
 		if(value < from || value > to) throw new RuntimeException();
 	}
 	
-	private void ValidateDay(int value)
+	private void validateDay(int value)
 	{
 		int[] maxMonthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 		
-		if(IsLeap()) maxMonthDays[1] = 29;
+		if(isLeap()) maxMonthDays[1] = 29;
 		
 		if(value <= 0 || value > maxMonthDays[this.month - 1]) throw new RuntimeException();
 	}
 	
-	public int CompareTo(Date d)
+	public int compareTo(Date date, DateCompare dateCompare)
 	{
-		int result = 0;
-		result = CompareInts(this.year, d.getYear());
-		if(result == 0)
+		if(date == null || dateCompare == null)
 		{
-			result = CompareInts(this.month, d.getMonth()); 
-			if(result == 0)
+			throw new RuntimeException("Null");
+		}
+		
+		switch(dateCompare)
+		{
+			case Date:
 			{
-				result = CompareInts(this.day, d.getDay()); 
-				if(result == 0)
-				{
-					result = CompareInts(this.hours, d.getHours()); 
-					if(result == 0)
-					{
-						result = CompareInts(this.minutes, d.getMinutes()); 
-						if(result == 0)
-						{
-							result = CompareInts(this.seconds, d.getSeconds()); 
-							if(result == 0)
-							{
-								return 0;
-							}
-						}
-					}
-				}
+				return compareByDate(this, date);
+			}
+			case Time:
+			{
+				return compareByTime(this, date);
+			}
+			case DateTime:
+			{
+				return compareTo(date);
+			}
+			default:
+			{
+				return 1;
 			}
 		}
+	}
+	
+	private int compareByDate(Date d1, Date d2)
+	{
+		int result = 0;
+		result = compareInts(d1.getYear(), d2.getYear());
+		if(result == 0)
+		{
+			result = compareInts(d1.getMonth(), d2.getMonth()); 
+			if(result == 0)
+			{
+				result = compareInts(d1.getDay(), d2.getDay()); 
+			}
+		}
+		
 		return result;
 	}
 	
-	private int CompareInts(int a, int b)
+	private int compareByTime(Date d1, Date d2)
+	{
+		int result = 0;
+		result = compareInts(d1.getHours(), d2.getHours());
+		if(result == 0)
+		{
+			result = compareInts(d1.getMinutes(), d2.getMinutes()); 
+			if(result == 0)
+			{
+				result = compareInts(d1.getSeconds(), d2.getSeconds()); 
+			}
+		}
+		
+		return result;
+	}
+	
+	public int compareTo(Date d)
+	{
+		int result = 0;
+		result = compareByDate(this, d);
+		if(result == 0)
+		{
+			result = compareByTime(this, d);
+		}
+			
+		return result;
+	}
+	
+	private int compareInts(int a, int b)
 	{
 		if(a > b)
 		{
@@ -204,7 +246,7 @@ public class Date
 		else return 0;
 	}
 	
-	public void AddSecond()
+	public void addSecond()
 	{
 		this.seconds++;
 		if(this.seconds > SECONDS_MAX_VALUE)
@@ -222,7 +264,7 @@ public class Date
 					this.hours = HOURS_MIN_VALUE;
 					this.day++;
 					
-					if(day > MaxMonthDay(month))
+					if(day > maxMonthDay(month))
 					{
 						this.day = DAYS_MIN_VALUE;
 						this.month++;
@@ -237,7 +279,7 @@ public class Date
 		}
 	}
 	
-	public boolean IsLeap()
+	public boolean isLeap()
 	{
 		if(year % 4 == 0)
 		{
@@ -254,20 +296,20 @@ public class Date
 		}
 	}
 	
-	private int MaxMonthDay(int month)
+	private int maxMonthDay(int month)
 	{
 		int[] maxMonthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 		
-		if(IsLeap()) maxMonthDays[1] = 29;
+		if(isLeap()) maxMonthDays[1] = 29;
 		
 		return maxMonthDays[month - 1];
 	}
 	
-	public int DayOfTheYear()
+	public int dayOfTheYear()
 	{
 		int[] maxMonthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 		
-		if(IsLeap()) maxMonthDays[1] = 29;
+		if(isLeap()) maxMonthDays[1] = 29;
 		
 		int result = 0;
 		
@@ -282,29 +324,29 @@ public class Date
 	}
 	
 	//In this the year starts on Monday
-	public int WhichWeek()
+	public int whichWeek()
 	{
-		if(DayOfTheYear() % WEEK_DAYS != 0)
+		if(dayOfTheYear() % WEEK_DAYS != 0)
 		{
-			return DayOfTheYear() / WEEK_DAYS + 1;
+			return dayOfTheYear() / WEEK_DAYS + 1;
 		}
-		return DayOfTheYear() / WEEK_DAYS;
+		return dayOfTheYear() / WEEK_DAYS;
 	}
 	
 	//In this start of the year is given
-	public int WhichWeek(int startDay)
+	public int whichWeek(int startDay)
 	{
 		if(startDay < 1 || startDay > WEEK_DAYS) throw new RuntimeException();
 		
-		if((DayOfTheYear() + startDay - 1) % WEEK_DAYS != 0)
+		if((dayOfTheYear() + startDay - 1) % WEEK_DAYS != 0)
 		{
-			return (DayOfTheYear() + startDay - 1) / WEEK_DAYS + 1;
+			return (dayOfTheYear() + startDay - 1) / WEEK_DAYS + 1;
 		}
-		return (DayOfTheYear() + startDay - 1) / WEEK_DAYS;
+		return (dayOfTheYear() + startDay - 1) / WEEK_DAYS;
 	}
 	
 	//Algorithm from Internet
-	public DayOfWeek WhichDayOfWeek()
+	public DayOfWeek whichDayOfWeek()
 	{
 		int[] t = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
 		
@@ -316,7 +358,7 @@ public class Date
 										+ t[this.month-1] + this.day) % 7));
 	}
 	
-	public String ToString()
+	public String toString()
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(hours);
@@ -331,7 +373,7 @@ public class Date
 		stringBuilder.append(".");
 		stringBuilder.append(year);
 		stringBuilder.append(", ");
-		stringBuilder.append(WhichDayOfWeek());
+		stringBuilder.append(whichDayOfWeek());
 		
 		return stringBuilder.toString();
 	}
