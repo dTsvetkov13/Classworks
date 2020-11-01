@@ -313,7 +313,7 @@ public class Date
 		
 		return DayOfWeek.getDayOfWeek(((currYear + currYear/4 
 										- currYear/100 + currYear/400 
-										+ t[this.month-1] + this.day) % 7) - 1);
+										+ t[this.month-1] + this.day) % 7));
 	}
 	
 	public String ToString()
