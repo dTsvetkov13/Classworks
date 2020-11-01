@@ -50,15 +50,9 @@ public class Reminder
 		{
 			temp = events[i].getDate(); 
 			
-			if(temp.getYear() == date.getYear())
+			if(onTheSameDay(temp, date))
 			{
-				if(temp.getMonth() == date.getMonth())
-				{
-					if(temp.getDay() == date.getDay())
-					{
-						resultSize++;
-					}
-				}
+				resultSize++;
 			}
 		}
 		
@@ -70,20 +64,30 @@ public class Reminder
 		{
 			temp = events[i].getDate();
 			
-			if(temp.getYear() == date.getYear())
+			if(onTheSameDay(temp, date))
 			{
-				if(temp.getMonth() == date.getMonth())
-				{
-					if(temp.getDay() == date.getDay())
-					{
-						result[index] = events[i];
-						index++;
-					}
-				}
+				result[index] = events[i];
+				index++;
 			}
 		}
 		
 		return result;
+	}
+	
+	private boolean onTheSameDay(Date d1, Date d2)
+	{
+		if(d1.getYear() == d2.getYear())
+		{
+			if(d1.getMonth() == d2.getMonth())
+			{
+				if(d1.getDay() == d2.getDay())
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	public void remind()
