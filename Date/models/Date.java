@@ -296,7 +296,7 @@ public class Date
 		}
 	}
 	
-	private int maxMonthDay(int month)
+	public int maxMonthDay(int month)
 	{
 		int[] maxMonthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 		
