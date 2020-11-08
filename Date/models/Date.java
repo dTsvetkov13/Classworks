@@ -36,6 +36,7 @@ public class Date
 		setMonth(1);
 		setDay(1);
 		setYear(1);
+		setDayOfWeek(whichDayOfWeek());
 	}
 	
 	//A constructor to set all fields
@@ -47,12 +48,14 @@ public class Date
 		setMonth(month);
 		setDay(day);
 		setYear(year);
+		setDayOfWeek(whichDayOfWeek());
 	}
 	
 	//A constructor for the beginning of a day 
 	public Date(int day, int month, int year)
 	{
 		this(0, 0, 0, day, month, year);
+		setDayOfWeek(whichDayOfWeek());
 	}
 	
 	//A constructor to specify the day of week
