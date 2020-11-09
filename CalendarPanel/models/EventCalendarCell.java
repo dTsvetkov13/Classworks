@@ -14,9 +14,13 @@ import oop.classes.event.models.Event;
 
 public class EventCalendarCell
 {
-	public static int PANEL_WIDTH = 100;
-	public static int PANEL_HEIGHT= 100;
-	public static int EVENT_HEIGHT = 20;
+	public static final int PANEL_WIDTH = 100;
+	public static final int PANEL_HEIGHT= 100;
+	public static final int EVENT_HEIGHT = 20;
+	
+	public static final Color DEFAULT_DAY_COLOR = Color.gray;
+	public static final Color WEEK_DAY_COLOR = Color.decode("#6A5ACD");
+	public static final Color HOLIDAY_DAY_COLOR = Color.white;
 	
 	private JPanel panel;
 	private Rectangle panelRectangle;
@@ -30,7 +34,7 @@ public class EventCalendarCell
 		setX(x);
 		setY(y);
 		initializePanel();
-		this.panel.setBackground(Color.gray);
+		this.panel.setBackground(DEFAULT_DAY_COLOR);
 		initializeTextArea();
 	}
 	
@@ -97,9 +101,18 @@ public class EventCalendarCell
 		this.panel.setVisible(isVisible);
 	}
 	
-	public void addDayLabel(int day)
+	public void addDayLabel(int day, boolean isWeekDay)
 	{
-		addLabel(Integer.toString(day), new Rectangle(40, 5, 20, 10), Color.lightGray);
+		if(isWeekDay)
+		{
+			addLabel(Integer.toString(day), new Rectangle(40, 5, 20, 10));
+			this.panel.setBackground(WEEK_DAY_COLOR);
+		}
+		else
+		{
+			addLabel(Integer.toString(day), new Rectangle(40, 5, 20, 10));
+			this.panel.setBackground(HOLIDAY_DAY_COLOR);
+		}
 	}
 	
 	private void appendEventTextArea(String text)
@@ -117,16 +130,11 @@ public class EventCalendarCell
 		appendEventTextArea(event.getName() + "\n");
 	}
 	
-	private void addLabel(String text, Rectangle rect, Color color)
+	private void addLabel(String text, Rectangle rect)
 	{
 		JLabel lbl = new JLabel();
 		lbl.setText(text);
 		lbl.setBounds(rect);
-		
-		if(color != null)
-		{			
-			this.panel.setBackground(color);
-		}
 		this.panel.add(lbl);
 	}
 	
