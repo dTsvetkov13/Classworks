@@ -168,7 +168,7 @@ public class CalendarPanel
 		
 		int col = event.getDate().getDayOfWeek().ordinal();
 		int row = (this.firstMonthDay.getDayOfWeek().ordinal() + event.getDate().getDay() - 1) / 7;
-		System.out.println("Add event: " + event.toString());
+		
 		this.cells[row][col].addEvent(event);
 	}
 	
@@ -177,6 +177,27 @@ public class CalendarPanel
 		for(Event event : events)
 		{
 			addEvent(event);
+		}
+	}
+	
+	public void removeEvent(Event event)
+	{
+		if(event == null)
+		{
+			throw new RuntimeException("Event is null");
+		}
+		
+		int col = event.getDate().getDayOfWeek().ordinal();
+		int row = (this.firstMonthDay.getDayOfWeek().ordinal() + event.getDate().getDay() - 1) / 7;
+		
+		this.cells[row][col].removeEvent(event);
+	}
+	
+	public void removeEvents(Event[] events)
+	{
+		for(Event event : events)
+		{
+			removeEvent(event);
 		}
 	}
 }
