@@ -7,15 +7,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import com.sun.jdi.event.EventSet;
-
+import oop.classes.Date.enums.DayOfWeek;
 import oop.classes.Date.models.Date;
 import oop.classes.event.models.Event;
 
 public class CalendarPanel
 {
-	static private int MARGIN_BETWEEN_TWO_CELLS = 10; //TODO: decide whether to be percent 
-	static private int MARGIN_TO_THE_BORDER = 20;
+	static private final int MARGIN_BETWEEN_TWO_CELLS = 10; //TODO: decide whether to be percent 
+	static private final int MARGIN_TO_THE_BORDER = 20;
+	static private final int DAY_NAME_HEIGHT = 20; //width is from EventCalendarCell.PANEL_WIDTH
 	
 	private JFrame window;
 	private Date firstMonthDay;
@@ -45,6 +45,20 @@ public class CalendarPanel
 		
 		window.setLayout(null);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JLabel temp;
+		DayOfWeek[] daysOfTheWeek = DayOfWeek.values();
+		
+		for(int i = 0; i < cols; i++)
+		{
+			temp = new JLabel();
+			temp.setText(daysOfTheWeek[i].toString(3));
+			temp.setBounds(new Rectangle(
+							MARGIN_TO_THE_BORDER + i * (MARGIN_BETWEEN_TWO_CELLS + EventCalendarCell.PANEL_WIDTH), 
+							0, EventCalendarCell.PANEL_WIDTH, DAY_NAME_HEIGHT));
+			temp.setVisible(true);
+			window.add(temp);
+		}
 	}
 	
 	public void setWindowBounds(int x, int y, int width, int height)
@@ -70,6 +84,8 @@ public class CalendarPanel
 		
 		int day = 1;
 		
+		boolean isWeekDay = true;
+		
 		for(int i = 0; i < rows; i++)
 		{
 			if(i != 0)
@@ -78,8 +94,13 @@ public class CalendarPanel
 			}
 			for(; index < cols; index++)
 			{
+				if((index == (cols - 2)) || (index == (cols - 1)))
+				{
+					isWeekDay = false;
+				}
+				
 				addEventCalendarCell(i, index);
-				cells[i][index].addDayLabel(day);
+				cells[i][index].addDayLabel(day, isWeekDay);
 				
 				day++;
 				
@@ -89,6 +110,7 @@ public class CalendarPanel
 					break;
 				}
 			}
+			isWeekDay = true;
 		}
 		
 		for(; index < cols; index++)
@@ -103,7 +125,7 @@ public class CalendarPanel
 	{
 		cells[row][col] = new EventCalendarCell(
 						MARGIN_TO_THE_BORDER + col * (EventCalendarCell.PANEL_WIDTH + MARGIN_BETWEEN_TWO_CELLS),
-						row * (EventCalendarCell.PANEL_HEIGHT + MARGIN_BETWEEN_TWO_CELLS));
+						DAY_NAME_HEIGHT + row * (EventCalendarCell.PANEL_HEIGHT + MARGIN_BETWEEN_TWO_CELLS));
 		cells[row][col].setVisible(true);
 		window.add(cells[row][col].getPanel());
 	}
