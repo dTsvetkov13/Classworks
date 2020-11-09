@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
+import oop.classes.Date.enums.DateCompare;
 import oop.classes.event.models.Event;
 
 public class EventCalendarCell
@@ -19,6 +21,7 @@ public class EventCalendarCell
 	private JPanel panel;
 	private Rectangle panelRectangle;
 	private ArrayList<Event> events;
+	private JTextArea eventTextArea;
 	
 	public EventCalendarCell(int x, int y)
 	{
@@ -28,11 +31,13 @@ public class EventCalendarCell
 		setY(y);
 		initializePanel();
 		this.panel.setBackground(Color.gray);
+		initializeTextArea();
 	}
 	
 	private void initializePanel()
 	{
 		this.panel = new JPanel();
+		this.panel.setLayout(null);
 		setPanel(this.panelRectangle.x, this.panelRectangle.y, this.panelRectangle.width, this.panelRectangle.height);
 	}
 
@@ -69,6 +74,12 @@ public class EventCalendarCell
 		return this.panelRectangle.y;
 	}
 	
+	private void initializeTextArea()
+	{
+		this.eventTextArea = new JTextArea();
+		this.eventTextArea.setBounds(new Rectangle(5, 20, 90, 75));
+	}
+	
 	public void setPanel(int x, int y, int width, int height)
 	{
 		//TODO: validation
@@ -86,20 +97,24 @@ public class EventCalendarCell
 		this.panel.setVisible(isVisible);
 	}
 	
-	public void draw()
-	{
-		
-	}
-	
 	public void addDayLabel(int day)
 	{
 		addLabel(Integer.toString(day), new Rectangle(40, 5, 20, 10), Color.lightGray);
 	}
 	
+	private void appendEventTextArea(String text)
+	{
+		this.eventTextArea.append(text);
+		if(!this.eventTextArea.getText().isEmpty() && !this.eventTextArea.isShowing())
+		{
+			this.panel.add(eventTextArea);
+		}
+	}
+	
 	public void addEvent(Event event)
 	{
-		events.add(event);
-		addLabel(events.size() + " " + event.getName(), new Rectangle(0, events.size() * EVENT_HEIGHT, PANEL_WIDTH, EVENT_HEIGHT), null);
+		this.events.add(event);
+		appendEventTextArea(event.getName() + "\n");
 	}
 	
 	private void addLabel(String text, Rectangle rect, Color color)
@@ -113,5 +128,41 @@ public class EventCalendarCell
 			this.panel.setBackground(color);
 		}
 		this.panel.add(lbl);
+	}
+	
+	public void removeEvent(int at)
+	{
+		this.events.remove(at);
+		setEventTextAreaWithAvailableEvents();	
+	}
+	
+	public void removeEvent(Event event)
+	{
+		//TODO: see if can be optimized
+		
+		for(int i = 0; i < this.events.size(); i++)
+		{
+			if(this.events.get(i).getName().equals(event.getName())) //Don't know better way
+			{
+				if(this.events.get(i).getDate().compareTo(event.getDate(), DateCompare.DateTime) == 0) //same
+				{
+					this.events.remove(i);
+				}
+			}
+		}
+		
+		setEventTextAreaWithAvailableEvents();
+	}
+	
+	private void setEventTextAreaWithAvailableEvents() //Awful name
+	{
+		//TODO: see if can be optimized
+		
+		this.eventTextArea.setText("");
+		
+		for(int i = 0; i < this.events.size(); i++)
+		{
+			this.eventTextArea.append(this.events.get(i).getName() + "\n");
+		}
 	}
 }
