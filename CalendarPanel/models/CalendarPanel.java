@@ -1,11 +1,11 @@
 package oop.classes.CalendarPanel.models;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import com.sun.jdi.event.EventSet;
 
@@ -45,7 +45,6 @@ public class CalendarPanel
 		
 		window.setLayout(null);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setVisible(true);
 	}
 	
 	public void setWindowBounds(int x, int y, int width, int height)
@@ -84,7 +83,7 @@ public class CalendarPanel
 				
 				day++;
 				
-				if(day >= this.firstMonthDay.maxMonthDay(this.firstMonthDay.getMonth()))
+				if(day > this.firstMonthDay.maxMonthDay(this.firstMonthDay.getMonth()))
 				{
 					index++;
 					break;
@@ -96,11 +95,15 @@ public class CalendarPanel
 		{
 			addEventCalendarCell(rows - 1, index);
 		}
+		
+		window.setVisible(true);
 	}
 	
 	private void addEventCalendarCell(int row, int col)
 	{
-		cells[row][col] = new EventCalendarCell(MARGIN_TO_THE_BORDER + col * (EventCalendarCell.PANEL_WIDTH + MARGIN_BETWEEN_TWO_CELLS), row * (EventCalendarCell.PANEL_HEIGHT + MARGIN_BETWEEN_TWO_CELLS));
+		cells[row][col] = new EventCalendarCell(
+						MARGIN_TO_THE_BORDER + col * (EventCalendarCell.PANEL_WIDTH + MARGIN_BETWEEN_TWO_CELLS),
+						row * (EventCalendarCell.PANEL_HEIGHT + MARGIN_BETWEEN_TWO_CELLS));
 		cells[row][col].setVisible(true);
 		window.add(cells[row][col].getPanel());
 	}
@@ -133,8 +136,6 @@ public class CalendarPanel
 		}
 		
 		setRows(tempRows);
-		
-		setCells();
 	}
 	
 	private void setRows(int rows)
@@ -145,6 +146,7 @@ public class CalendarPanel
 		}
 		
 		this.rows = rows;
+		setCells();
 	}
 	
 	public int getRows()
@@ -166,7 +168,7 @@ public class CalendarPanel
 		
 		int col = event.getDate().getDayOfWeek().ordinal();
 		int row = (this.firstMonthDay.getDayOfWeek().ordinal() + event.getDate().getDay() - 1) / 7;
-		
+		System.out.println("Add event: " + event.toString());
 		this.cells[row][col].addEvent(event);
 	}
 	
